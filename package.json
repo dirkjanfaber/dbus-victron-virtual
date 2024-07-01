@@ -1,0 +1,23 @@
+{
+  "name": "dbus-victron",
+  "version": "0.1.0",
+  "description": "Add interoperability with victron dbus to a given dbus interface",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chris927/dbus-victron.git"
+  },
+  "keywords": [
+    "dbus",
+    "victron"
+  ],
+  "author": "chris@uber5.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Chris927/dbus-victron/issues"
+  },
+  "homepage": "https://github.com/Chris927/dbus-victron#readme"
+}
