@@ -61,11 +61,11 @@ export function addVictronInterfases(bus, declaration, definition) {
   bus.exportInterface(iface, '/', ifaceDesc);
 
   // support GetValue for each property
-  for (const [k, v] of Object.entries(declaration.properties || {})) {
+  for (const [k,] of Object.entries(declaration.properties || {})) {
     console.log('should add SetValue for property', k);
     bus.exportInterface(
       {
-        SetValue: function(value, msg) {
+        SetValue: function(value) {
           console.log(
             'SetValue',
             JSON.stringify(arguments[0]),
