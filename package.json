@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Add interoperability with victron dbus to a given dbus interface",
   "main": "src/index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "jest",
     "lint": "eslint 'src/**/*.js'",

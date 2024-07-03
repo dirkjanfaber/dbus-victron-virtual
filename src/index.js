@@ -1,5 +1,5 @@
 
-export function addVictronInterfases(bus, declaration, definition) {
+function addVictronInterfaces(bus, declaration, definition) {
   function wrapValue(t, v) {
     switch (t) {
       case 'b':
@@ -92,3 +92,4 @@ export function addVictronInterfases(bus, declaration, definition) {
   }
 }
 
+module.exports = { addVictronInterfaces };
