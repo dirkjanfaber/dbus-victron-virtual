@@ -18,7 +18,7 @@
     "victron"
   ],
   "author": "chris@uber5.com",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Chris927/dbus-victron-virtual/issues"
   },
