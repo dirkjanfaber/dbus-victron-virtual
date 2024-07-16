@@ -4,7 +4,7 @@ import jest from "eslint-plugin-jest"
 
 
 export default [
-  { languageOptions: { globals: { ...globals.browser, ...globals.jest } } },
+  { languageOptions: { sourceType: 'commonjs', globals: { ...globals.browser, ...globals.jest } } },
   pluginJs.configs.recommended,
   { files: ["src/__tests__/*.js"], plugins: { jest: jest } }
 ];

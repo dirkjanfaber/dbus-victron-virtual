@@ -65,7 +65,7 @@ function addVictronInterfaces(bus, declaration, definition) {
     console.log('should add SetValue for property', k);
     bus.exportInterface(
       {
-        SetValue: function(value) {
+        SetValue: function(value, /* msg */) {
           console.log(
             'SetValue',
             JSON.stringify(arguments[0]),
@@ -90,6 +90,90 @@ function addVictronInterfaces(bus, declaration, definition) {
       }
     );
   }
+
+  function addSettings(settings) {
+    const body = [
+      settings.map(setting => [
+        ['path', wrapValue('s', setting.path)],
+        ['default', wrapValue('s', '' + setting.default)] // TODO: forcing value to be string
+        // TODO: incomplete, min and max missing
+      ])
+    ];
+    bus.invoke(
+      {
+        interface: 'com.victronenergy.Settings',
+        path: '/',
+        member: 'AddSettings',
+        destination: 'com.victronenergy.settings',
+        type: undefined,
+        signature: 'aa{sv}',
+        body: body
+      },
+      function() {
+        console.log('addSettings, callback', arguments);
+      }
+    );
+  }
+
+  function removeSettings(settings) {
+    const body = [settings.map(setting => setting.path)];
+
+    bus.invoke(
+      {
+        interface: 'com.victronenergy.Settings',
+        path: '/',
+        member: 'RemoveSettings',
+        destination: 'com.victronenergy.settings',
+        type: undefined,
+        signature: 'as',
+        body: body
+      },
+      function() {
+        console.log('removeSettings, callback', arguments);
+      }
+    );
+  }
+
+  function setValue({ path, interface_, destination, value }) {
+    bus.invoke(
+      {
+        interface: interface_,
+        path: path || '/',
+        member: 'SetValue',
+        destination,
+        signature: 'v',
+        body: [wrapValue('s', '' + value)] // TODO: only supports string type for now
+      },
+      function() {
+        console.log('setValue, callback', arguments);
+      }
+    );
+  }
+
+  function getValue({ path, interface_, destination }) {
+    bus.invoke(
+      {
+        interface: interface_,
+        path: path || '/',
+        member: 'GetValue',
+        destination
+        // signature: '',
+      },
+      function() {
+        // TODO: we need a way for the caller to receive the value, not just log it
+        console.log('getValue, callback', JSON.stringify(arguments, null, 2));
+      }
+    );
+  }
+
+  return {
+    emitItemsChanged: () => iface.emit('ItemsChanged', getProperties()),
+    addSettings,
+    removeSettings,
+    setValue,
+    getValue
+  };
 }
+
 
 module.exports = { addVictronInterfaces };
