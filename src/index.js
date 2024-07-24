@@ -1,5 +1,21 @@
 
 function addVictronInterfaces(bus, declaration, definition) {
+
+  const warnings = [];
+
+  if (!declaration.name) {
+    throw new Error('Interface name is required');
+  }
+
+  if (!declaration.name.match(/^[a-zA-Z0-9_.]+$/)) {
+    warnings.push(
+      `Interface name contains problematic characters, only a-zA-Z0-9_ allowed.`
+    );
+  }
+  if (!declaration.name.match(/^com.victronenergy/)) {
+    warnings.push('Interface name should start with com.victronenergy');
+  }
+
   function wrapValue(t, v) {
     switch (t) {
       case 'b':
@@ -62,7 +78,6 @@ function addVictronInterfaces(bus, declaration, definition) {
 
   // support GetValue for each property
   for (const [k,] of Object.entries(declaration.properties || {})) {
-    console.log('should add SetValue for property', k);
     bus.exportInterface(
       {
         SetValue: function(value, /* msg */) {
@@ -171,7 +186,8 @@ function addVictronInterfaces(bus, declaration, definition) {
     addSettings,
     removeSettings,
     setValue,
-    getValue
+    getValue,
+    warnings
   };
 }
 
