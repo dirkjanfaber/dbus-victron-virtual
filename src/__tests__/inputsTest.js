@@ -12,6 +12,19 @@ describe('victron-dbus-virtual, input parameters tests', () => {
     expect(!!result).toBe(true);
   });
 
+  it('fails in some scenarios', () => {
+    try {
+      addVictronInterfaces(noopBus, {}, {});
+    } catch (e) {
+      expect(e.message.includes('Interface name')).toBe(true);
+    }
+    try {
+      addVictronInterfaces(noopBus, { name: '' }, {});
+    } catch (e) {
+      expect(e.message.includes('Interface name')).toBe(true);
+    }
+  });
+
   it('works for an example with properties', () => {
     const declaration = {
       name: 'com.victronenergy.myservice',
@@ -27,6 +40,7 @@ describe('victron-dbus-virtual, input parameters tests', () => {
     };
     const result = addVictronInterfaces(noopBus, declaration, definition);
     expect(!!result).toBe(true);
+    expect(result.warnings.length).toBe(0);
   });
 
   it('provides a warning if the interface name contains problematic characters', () => {
