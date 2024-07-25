@@ -61,4 +61,34 @@ describe('victron-dbus-virtual, input parameters tests', () => {
     expect(warnings[0].includes('start with com.victronenergy')).toBe(true);
   });
 
+  it('exports GetItems, and SetValue for each property', () => {
+    const declaration = {
+      name: 'some_name',
+      properties: {
+        'foo': 'i',
+        'bar': 's',
+        'baz': 'b',
+      }
+    }
+    const bus = {
+      exportInterface: jest.fn()
+    };
+
+    addVictronInterfaces(bus, declaration, {});
+    expect(bus.exportInterface.mock.calls.length).toBe(4);
+
+    const call0 = bus.exportInterface.mock.calls[0];
+    expect(Object.keys(call0[0])).toStrictEqual(['GetItems', 'emit']);
+
+    const call1 = bus.exportInterface.mock.calls[1];
+    expect(Object.keys(call1[0])).toStrictEqual(['SetValue']);
+    expect(call1[1]).toStrictEqual('/foo');
+    expect(call1[2].name).toBe('com.victronenergy.BusItem');
+
+    const call3 = bus.exportInterface.mock.calls[3];
+    expect(call3[1]).toStrictEqual('/baz');
+
+  });
+
+
 });
