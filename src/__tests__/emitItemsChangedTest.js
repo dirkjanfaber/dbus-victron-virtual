@@ -15,19 +15,17 @@ describe('victron-dbus-virtual, emitItemsChanged tests', () => {
   it('works for the happy case', () => {
     const declaration = { name: 'foo', properties: { StringProp: 's' } };
     const definition = { StringProp: 'hello' };
-    let called = false;
+    const emit = jest.fn();
     const bus = {
       exportInterface: (iface /* , _path, _ifaceDesc */) => {
-        iface.emit = function(name, args) {
-          expect(name).toBe('ItemsChanged');
-          expect(args).toEqual([['StringProp', [['Value', ['s', 'hello']], ['Text', ['s', 'hello']]]]]);
-          called = true;
-        }
+        iface.emit = emit;
       }
     }
     const { emitItemsChanged } = addVictronInterfaces(bus, declaration, definition);
     emitItemsChanged();
-    expect(called).toBe(true);
+    expect(emit.mock.calls.length).toBe(1);
+    expect(emit.mock.calls[0][0]).toBe('ItemsChanged');
+    expect(emit.mock.calls[0][1]).toEqual([['StringProp', [['Value', ['s', 'hello']], ['Text', ['s', 'hello']]]]]);
   });
 
 });
