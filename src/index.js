@@ -106,7 +106,7 @@ function addVictronInterfaces(bus, declaration, definition) {
     );
   }
 
-  function addSettings(settings) {
+  async function addSettings(settings) {
     const body = [
       settings.map(setting => [
         ['path', wrapValue('s', setting.path)],
@@ -114,20 +114,27 @@ function addVictronInterfaces(bus, declaration, definition) {
         // TODO: incomplete, min and max missing
       ])
     ];
-    bus.invoke(
-      {
-        interface: 'com.victronenergy.Settings',
-        path: '/',
-        member: 'AddSettings',
-        destination: 'com.victronenergy.settings',
-        type: undefined,
-        signature: 'aa{sv}',
-        body: body
-      },
-      function() {
-        console.log('addSettings, callback', arguments);
-      }
-    );
+    return await new Promise((resolve, reject) => {
+      bus.invoke(
+        {
+          interface: 'com.victronenergy.Settings',
+          path: '/',
+          member: 'AddSettings',
+          destination: 'com.victronenergy.settings',
+          type: undefined,
+          signature: 'aa{sv}',
+          body: body
+        },
+        function(err, result) {
+          // TODO: should avoid console.log
+          console.log('addSettings, callback', arguments);
+          if (err) {
+            return reject(err);
+          }
+          return resolve(result);
+        }
+      );
+    });
   }
 
   function removeSettings(settings) {
@@ -149,20 +156,26 @@ function addVictronInterfaces(bus, declaration, definition) {
     );
   }
 
-  function setValue({ path, interface_, destination, value }) {
-    bus.invoke(
-      {
-        interface: interface_,
-        path: path || '/',
-        member: 'SetValue',
-        destination,
-        signature: 'v',
-        body: [wrapValue('s', '' + value)] // TODO: only supports string type for now
-      },
-      function() {
-        console.log('setValue, callback', arguments);
-      }
-    );
+  async function setValue({ path, interface_, destination, value }) {
+    return await new Promise((resolve, reject) => {
+      bus.invoke(
+        {
+          interface: interface_,
+          path: path || '/',
+          member: 'SetValue',
+          destination,
+          signature: 'v',
+          body: [wrapValue('s', '' + value)] // TODO: only supports string type for now
+        },
+        function(err, result) {
+          console.log('setValue, callback', arguments);
+          if (err) {
+            return reject(err);
+          }
+          resolve(result);
+        }
+      );
+    });
   }
 
   function getValue({ path, interface_, destination }) {
