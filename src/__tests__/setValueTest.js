@@ -1,9 +1,9 @@
 /* eslint-env node */
 const { addVictronInterfaces } = require('../index');
 
-describe('victron-dbus-virtual, setItems tests', () => {
+describe('victron-dbus-virtual, setValue tests', () => {
 
-  it('works for the happy case', async () => {
+  it('works for the happy case for settings', async () => {
     const declaration = { name: 'foo', properties: { StringProp: 's' } };
     const definition = { StringProp: 'hello' };
     const emit = jest.fn();
@@ -12,17 +12,15 @@ describe('victron-dbus-virtual, setItems tests', () => {
         iface.emit = emit;
       },
       invoke: function(args, cb) {
-        console.log('invoke', JSON.stringify(arguments));
-        process.nextTick(() => cb(null, 'dummy invoke response'));
+        process.nextTick(() => cb(null, args));
       }
     }
     const { addSettings, setValue } = addVictronInterfaces(bus, declaration, definition);
 
-    // TODO: the return value should be a promise with the response from invoking the bus
     const settingsResult = await addSettings([
       { path: '/Settings/MySettings/Setting', default: 3, min: 0, max: 10 },
     ]);
-    console.log('settingsResult (TEST)', settingsResult)
+    expect(settingsResult.member).toBe('AddSettings');
 
     const setValueResult = await setValue({
       path: '/Settings/MySettings/Setting',
@@ -30,7 +28,11 @@ describe('victron-dbus-virtual, setItems tests', () => {
       interface: 'com.victronenergy.BusItem',
       destination: 'com.victronenergy.settings',
     });
-    console.log('setValueResult (TEST)', setValueResult)
+    expect(setValueResult.member).toBe('SetValue');
   });
+
+  // it('works for the happy case when we get called', async () => {
+
+  // });
 
 });

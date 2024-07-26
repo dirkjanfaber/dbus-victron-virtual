@@ -126,8 +126,6 @@ function addVictronInterfaces(bus, declaration, definition) {
           body: body
         },
         function(err, result) {
-          // TODO: should avoid console.log
-          console.log('addSettings, callback', arguments);
           if (err) {
             return reject(err);
           }
@@ -168,7 +166,6 @@ function addVictronInterfaces(bus, declaration, definition) {
           body: [wrapValue('s', '' + value)] // TODO: only supports string type for now
         },
         function(err, result) {
-          console.log('setValue, callback', arguments);
           if (err) {
             return reject(err);
           }
