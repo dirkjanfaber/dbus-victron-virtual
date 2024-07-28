@@ -35,7 +35,7 @@ You can develop on a device that runs [Venus OS](https://github.com/victronenerg
 * clone the repository
 * `npm install`
 * `npm run test`
-* run integration tests with `TEST_INTEGRATION=1 npm run test`
+* run integration tests with `DBUS_SESSION_BUS_ADDRESS=unix:socket=/var/run/dbus/system_bus_socket TEST_INTEGRATION=1 npm run test`
 
 The implementation is in `./src/index.js`, tests are in `./src/__tests__`.
 
