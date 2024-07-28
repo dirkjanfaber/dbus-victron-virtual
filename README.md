@@ -39,3 +39,12 @@ You can develop on a device that runs [Venus OS](https://github.com/victronenerg
 
 The implementation is in `./src/index.js`, tests are in `./src/__tests__`.
 
+Test coverage stats, when run with the integration `./src/__tests__/integrationTest.js`:
+
+----------|---------|----------|---------|---------|---------------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------|---------|----------|---------|---------|---------------------------
+All files |   85.18 |    69.23 |     100 |    84.9 |
+ index.js |   85.18 |    69.23 |     100 |    84.9 | 28,35,39-41,94-95,130,170
+----------|---------|----------|---------|---------|---------------------------
+
