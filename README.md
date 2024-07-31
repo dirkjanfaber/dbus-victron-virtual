@@ -1,5 +1,11 @@
 # About
 
+> [!WARNING]  
+> This package is under active development. I believe it is ready for "bleeding
+> edge" use, but its API may have to change, based on findings and bugs.
+> Please use with caution.
+
+
 `dbus-victron-virtual` is a wrapper around
 [dbus-native](https://www.npmjs.com/package/dbus-native), which allows you to
 connect to [dbus](https://www.freedesktop.org/wiki/Software/dbus/), and
