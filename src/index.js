@@ -175,20 +175,23 @@ function addVictronInterfaces(bus, declaration, definition) {
     });
   }
 
-  function getValue({ path, interface_, destination }) {
-    bus.invoke(
-      {
-        interface: interface_,
-        path: path || '/',
-        member: 'GetValue',
-        destination
-        // signature: '',
-      },
-      function() {
-        // TODO: we need a way for the caller to receive the value, not just log it
-        console.log('getValue, callback', JSON.stringify(arguments, null, 2));
-      }
-    );
+  async function getValue({ path, interface_, destination }) {
+    return await new Promise((resolve, reject) => {
+      bus.invoke(
+        {
+          interface: interface_,
+          path: path || '/',
+          member: 'GetValue',
+          destination
+        },
+        function(err, result) {
+          if (err) {
+            return reject(err);
+          }
+          resolve(result);
+        }
+      );
+    });
   }
 
   return {
