@@ -44,13 +44,15 @@ describe('victron-dbus-virtual, setValue tests', () => {
         process.nextTick(() => cb(null, args));
       }
     }
-    const { addSettings, setValue } = addVictronInterfaces(bus, declaration, definition);
+    const { addSettings, setValue, removeSettings } = addVictronInterfaces(bus, declaration, definition);
 
+    // first, add a setting
     const settingsResult = await addSettings([
       { path: '/Settings/MySettings/Setting', default: 3, min: 0, max: 10 },
     ]);
     expect(settingsResult.member).toBe('AddSettings');
 
+    // then, we set its value
     const setValueResult = await setValue({
       path: '/Settings/MySettings/Setting',
       value: 7,
@@ -58,6 +60,18 @@ describe('victron-dbus-virtual, setValue tests', () => {
       destination: 'com.victronenergy.settings',
     });
     expect(setValueResult.member).toBe('SetValue');
+
+    // lastly, we remove the setting
+    const removeSettingsResult = await removeSettings([
+      { path: '/Settings/MySettings/Setting' },
+    ]);
+    expect(removeSettingsResult.member).toBe('RemoveSettings');
+    expect(removeSettingsResult.body).toStrictEqual([['/Settings/MySettings/Setting']]);
+    expect(removeSettingsResult.path).toBe('/');
+    expect(removeSettingsResult.interface).toBe('com.victronenergy.Settings');
+    expect(removeSettingsResult.destination).toBe('com.victronenergy.settings');
+    expect(removeSettingsResult.signature).toBe('as');
+
   });
 
   it('works for the happy case when we get called with SetValue', async () => {

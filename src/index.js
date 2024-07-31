@@ -135,23 +135,28 @@ function addVictronInterfaces(bus, declaration, definition) {
     });
   }
 
-  function removeSettings(settings) {
+  async function removeSettings(settings) {
     const body = [settings.map(setting => setting.path)];
 
-    bus.invoke(
-      {
-        interface: 'com.victronenergy.Settings',
-        path: '/',
-        member: 'RemoveSettings',
-        destination: 'com.victronenergy.settings',
-        type: undefined,
-        signature: 'as',
-        body: body
-      },
-      function() {
-        console.log('removeSettings, callback', arguments);
-      }
-    );
+    return new Promise((resolve, reject) => {
+      bus.invoke(
+        {
+          interface: 'com.victronenergy.Settings',
+          path: '/',
+          member: 'RemoveSettings',
+          destination: 'com.victronenergy.settings',
+          type: undefined,
+          signature: 'as',
+          body: body
+        },
+        function(err, result) {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(result);
+        }
+      );
+    });
   }
 
   async function setValue({ path, interface_, destination, value }) {
