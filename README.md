@@ -21,7 +21,20 @@ This package may be for you if
 
 # Usage
 
-(TODO)
+
+## Prerequisites
+
+You have a NodeJS project you want to run on [Venus
+OS](https://github.com/victronenergy/venus), and you want to communicate with
+the local dbus.
+
+
+## Setup Up
+
+* Add this package as a dependency: `npm add dbus-victron-virtual`.
+* Use this package, by importing or requiring it: `const { addVictronInterfaces } = require('dbus-victron-virtual');`
+* Make sure you understand how to use this package by studying the [example](https://github.com/Chris927/dbus-victron-virtual-test).
+* Have fun.
 
 
 # Development
@@ -29,7 +42,7 @@ This package may be for you if
 
 ## Prerequisites
 
-You can develop on a device that runs [Venus OS](https://github.com/victronenergy/venus). This way, the dbus environment as required by this package will be available.  Alternatively, you can develop in any environment that support node 18 or higher, but you won't be able to run integration tests.
+You can develop on a device that runs [Venus OS](https:/.com/victronenergy/venus). This way, the dbus environment as required by this package will be available.  Alternatively, you can develop in any environment that support node 18 or higher, but you won't be able to run integration tests.
 
 
 ## Steps
@@ -41,12 +54,12 @@ You can develop on a device that runs [Venus OS](https://github.com/victronenerg
 
 The implementation is in `./src/index.js`, tests are in `./src/__tests__`.
 
-Test coverage stats, when run with the integration `./src/__tests__/integrationTest.js`:
+Test coverage stats, when run with the integration test in `./src/__tests__/integrationTest.js` (with `TEST_INTEGRATION=1`):
 
 ----------|---------|----------|---------|---------|---------------------------
 File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 ----------|---------|----------|---------|---------|---------------------------
-All files |   85.18 |    69.23 |     100 |    84.9 |
- index.js |   85.18 |    69.23 |     100 |    84.9 | 28,35,39-41,94-95,130,170
+All files |   86.66 |    73.33 |     100 |   86.44 |
+ index.js |   86.66 |    73.33 |     100 |   86.44 | 28,35,39-41,94-95,130,154
 ----------|---------|----------|---------|---------|---------------------------
 
