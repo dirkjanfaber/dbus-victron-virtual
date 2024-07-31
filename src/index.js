@@ -106,7 +106,7 @@ function addVictronInterfaces(bus, declaration, definition) {
     );
   }
 
-  function addSettings(settings) {
+  async function addSettings(settings) {
     const body = [
       settings.map(setting => [
         ['path', wrapValue('s', setting.path)],
@@ -114,71 +114,89 @@ function addVictronInterfaces(bus, declaration, definition) {
         // TODO: incomplete, min and max missing
       ])
     ];
-    bus.invoke(
-      {
-        interface: 'com.victronenergy.Settings',
-        path: '/',
-        member: 'AddSettings',
-        destination: 'com.victronenergy.settings',
-        type: undefined,
-        signature: 'aa{sv}',
-        body: body
-      },
-      function() {
-        console.log('addSettings, callback', arguments);
-      }
-    );
+    return await new Promise((resolve, reject) => {
+      bus.invoke(
+        {
+          interface: 'com.victronenergy.Settings',
+          path: '/',
+          member: 'AddSettings',
+          destination: 'com.victronenergy.settings',
+          type: undefined,
+          signature: 'aa{sv}',
+          body: body
+        },
+        function(err, result) {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(result);
+        }
+      );
+    });
   }
 
-  function removeSettings(settings) {
+  async function removeSettings(settings) {
     const body = [settings.map(setting => setting.path)];
 
-    bus.invoke(
-      {
-        interface: 'com.victronenergy.Settings',
-        path: '/',
-        member: 'RemoveSettings',
-        destination: 'com.victronenergy.settings',
-        type: undefined,
-        signature: 'as',
-        body: body
-      },
-      function() {
-        console.log('removeSettings, callback', arguments);
-      }
-    );
+    return new Promise((resolve, reject) => {
+      bus.invoke(
+        {
+          interface: 'com.victronenergy.Settings',
+          path: '/',
+          member: 'RemoveSettings',
+          destination: 'com.victronenergy.settings',
+          type: undefined,
+          signature: 'as',
+          body: body
+        },
+        function(err, result) {
+          if (err) {
+            return reject(err);
+          }
+          return resolve(result);
+        }
+      );
+    });
   }
 
-  function setValue({ path, interface_, destination, value }) {
-    bus.invoke(
-      {
-        interface: interface_,
-        path: path || '/',
-        member: 'SetValue',
-        destination,
-        signature: 'v',
-        body: [wrapValue('s', '' + value)] // TODO: only supports string type for now
-      },
-      function() {
-        console.log('setValue, callback', arguments);
-      }
-    );
+  async function setValue({ path, interface_, destination, value }) {
+    return await new Promise((resolve, reject) => {
+      bus.invoke(
+        {
+          interface: interface_,
+          path: path || '/',
+          member: 'SetValue',
+          destination,
+          signature: 'v',
+          body: [wrapValue('s', '' + value)] // TODO: only supports string type for now
+        },
+        function(err, result) {
+          if (err) {
+            return reject(err);
+          }
+          resolve(result);
+        }
+      );
+    });
   }
 
-  function getValue({ path, interface_, destination }) {
-    bus.invoke(
-      {
-        interface: interface_,
-        path: path || '/',
-        member: 'GetValue',
-        destination
-        // signature: '',
-      },
-      function() {
-        // TODO: we need a way for the caller to receive the value, not just log it
-        console.log('getValue, callback', JSON.stringify(arguments, null, 2));
-      }
-    );
+  async function getValue({ path, interface_, destination }) {
+    return await new Promise((resolve, reject) => {
+      bus.invoke(
+        {
+          interface: interface_,
+          path: path || '/',
+          member: 'GetValue',
+          destination
+        },
+        function(err, result) {
+          if (err) {
+            return reject(err);
+          }
+          resolve(result);
+        }
+      );
+    });
   }
 
   return {

@@ -26,15 +26,27 @@ This package may be for you if
 
 # Development
 
+
 ## Prerequisites
 
 You can develop on a device that runs [Venus OS](https://github.com/victronenergy/venus). This way, the dbus environment as required by this package will be available.  Alternatively, you can develop in any environment that support node 18 or higher, but you won't be able to run integration tests.
+
 
 ## Steps
 
 * clone the repository
 * `npm install`
 * `npm run test`
+* run integration tests with `DBUS_SESSION_BUS_ADDRESS=unix:socket=/var/run/dbus/system_bus_socket TEST_INTEGRATION=1 npm run test`
 
 The implementation is in `./src/index.js`, tests are in `./src/__tests__`.
+
+Test coverage stats, when run with the integration `./src/__tests__/integrationTest.js`:
+
+----------|---------|----------|---------|---------|---------------------------
+File      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+----------|---------|----------|---------|---------|---------------------------
+All files |   85.18 |    69.23 |     100 |    84.9 |
+ index.js |   85.18 |    69.23 |     100 |    84.9 | 28,35,39-41,94-95,130,170
+----------|---------|----------|---------|---------|---------------------------
 
