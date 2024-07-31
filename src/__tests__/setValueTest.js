@@ -21,7 +21,6 @@ describe('victron-dbus-virtual, setValue tests', () => {
       interface_: 'foo'
     });
     expect(result.member).toBe('SetValue');
-    console.log('result...', result);
     expect(result.body).toStrictEqual([['s', 'fourty-two']]);
     expect(result.path).toBe('/StringProp');
     expect(result.interface).toBe('foo');

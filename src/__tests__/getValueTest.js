@@ -21,7 +21,6 @@ describe('victron-dbus-virtual, getValue tests', () => {
       interface_: 'foo',
       destination: 'foo'
     });
-    console.log('result...', result);
     expect(result.member).toBe('GetValue');
     expect(result.path).toBe('/StringProp');
     expect(result.interface).toBe('foo');
