@@ -24,6 +24,8 @@ function addVictronInterfaces(bus, declaration, definition) {
         return ['s', v];
       case 'i':
         return ['i', v];
+      case 'd':
+        return ['d', v];
       default:
         return v;
     }
@@ -36,6 +38,8 @@ function addVictronInterfaces(bus, declaration, definition) {
       case 's':
         return v[0];
       case 'i':
+        return Number(v[0]);
+      case 'd':
         return Number(v[0]);
       default:
         throw new Error(`Unsupported value type: ${JSON.stringify(t)}`);
