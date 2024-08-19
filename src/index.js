@@ -119,7 +119,7 @@ function addVictronInterfaces(bus, declaration, definition) {
               console.error(`Add support for ${declaration.properties[k]}`)
               // val = -1
           }
-          return [{type: declaration.properties[k], child: []}, [ val ]]
+          return [{type: declaration.properties[k], child: []}, [ val ]].toString()
         }
       },
       `/${k}`,
@@ -127,7 +127,7 @@ function addVictronInterfaces(bus, declaration, definition) {
         name: 'com.victronenergy.BusItem',
         methods: {
           SetValue: ['v', 'i', [], []],
-          GetValue: ['', 'a{}', [], ["value"]],
+          GetValue: ['', 's', [], ["value"]],
         }
       }
     );
