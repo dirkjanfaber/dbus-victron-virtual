@@ -49,7 +49,7 @@ function addVictronInterfaces(bus, declaration, definition) {
   // we use this for GetItems and ItemsChanged
   function getProperties() {
     return Object.entries(declaration.properties || {}).map(([k, v]) => {
-      console.log('getProperties, entries, (k,v):', k, v);
+      // console.log('getProperties, entries, (k,v):', k, v);
 
       return [
         k,
@@ -98,13 +98,33 @@ function addVictronInterfaces(bus, declaration, definition) {
             console.error(e);
             return -1;
           }
+        },
+        GetValue: function() {
+          console.log(`GetValue`, JSON.stringify(arguments[0]))
+          let val;
+          switch (declaration.properties[k]) {
+            case 's':
+              val = definition[k].toString()
+              break
+            case 'd':
+              val = Number(definition[k])
+              break
+            case 'i':
+              val = Number(definition[k])
+              break
+            default:
+              console.error(`Add support for ${declaration.properties[k]}`)
+              // val = -1
+          }
+          return [{type: declaration.properties[k], child: []}, [ val ]]
         }
       },
       `/${k}`,
       {
         name: 'com.victronenergy.BusItem',
         methods: {
-          SetValue: ['v', 'i', [], []]
+          SetValue: ['v', 'i', [], []],
+          GetValue: ['', 'a{}', [], ["value"]],
         }
       }
     );
