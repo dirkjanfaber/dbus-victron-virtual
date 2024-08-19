@@ -1,4 +1,6 @@
 
+const formatterSymbol = Symbol('formatter');
+
 function addVictronInterfaces(bus, declaration, definition) {
 
   const warnings = [];
@@ -27,7 +29,7 @@ function addVictronInterfaces(bus, declaration, definition) {
       case 'd':
         return ['d', v];
       default:
-        return v;
+        return t.type ? wrapValue(t.type, v) : v;
     }
   }
 
@@ -51,11 +53,12 @@ function addVictronInterfaces(bus, declaration, definition) {
     return Object.entries(declaration.properties || {}).map(([k, v]) => {
       // console.log('getProperties, entries, (k,v):', k, v);
 
+      const format = (v.type && v.format) ? v.format : (v) => '' + v;
       return [
         k,
         [
           ['Value', wrapValue(v, definition[k])],
-          ['Text', ['s', '' + definition[k]]]
+          ['Text', ['s', format(definition[k])]]
         ]
       ];
     });
@@ -234,4 +237,4 @@ function addVictronInterfaces(bus, declaration, definition) {
 }
 
 
-module.exports = { addVictronInterfaces };
+module.exports = { addVictronInterfaces, formatterSymbol };
